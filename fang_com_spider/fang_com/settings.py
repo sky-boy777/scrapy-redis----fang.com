@@ -10,12 +10,12 @@ LOG_LEVEL = 'WARNING'
 # redis分布式爬虫主要做下面几点
 # 一个去重的类，用来将url去重
 DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
-# 一个队列
+# 调度器
 SCHEDULER = "scrapy_redis.scheduler.Scheduler"
 # 是否持久化
 SCHEDULER_PERSIST = True
-# redis地址，我放在我的虚拟机上了
-REDIS_URL = "redis://192.168.1.101:6379"
+# redis地址
+REDIS_URL = "redis://127.0.0.1:6379"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -45,14 +45,14 @@ UA_LIST = [
 # 机器人协议，false表示不遵守
 ROBOTSTXT_OBEY = False
 
-# 下载延迟，太快了把人家网站弄崩了就不好了
-DOWNLOAD_DELAY = 5
+# 下载延迟（秒）
+DOWNLOAD_DELAY = 3
 
-# 下载中间件
+# 下载中间件，添加随机浏览器标识，代理
 DOWNLOADER_MIDDLEWARES = {
     'fang_com.middlewares.FangComDownloaderMiddleware': 543,
 }
-# 管道
+# 管道，保存你爬取的数据
 ITEM_PIPELINES = {
     'fang_com.pipelines.FangComPipeline': 300,
 }

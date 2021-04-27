@@ -4,27 +4,28 @@ import copy  # 每个方法间传递数据要用到深拷贝
 import re
 from scrapy_redis.spiders import RedisSpider   # 分布式爬虫继承的类
 
+
 class FangSpider(RedisSpider):
     name = 'fang'
     allowed_domains = ['fang.com']
     # start_urls = ['https://www.fang.com/SoufunFamily.htm']
-    # 将start_url插入redis,键为fang_url(lpush fang_url https://www.fang.com/SoufunFamily.htm)
+    # redis中插入：lpush fang_url https://www.fang.com/SoufunFamily.htm
     redis_key = "fang_url"
 
     def parse(self, response):
-        # 只要我国的信息，最后一个是其它的，后面的页面不一样，所以之提取它之前的
+        # 只要我国的信息，最后一个是其它的，后面的页面不一样，所以只提取它之前的
         tr_list = response.xpath('//div[@class="outCont"]/table/tr[position()<last()]')
-        sf = None  # 定义一个变量，用来存储“省份”
+        sf = None  # 定义一个变量，用来存储省份
         for tr in tr_list:
             item = {}
 
             # 提取省份
-            item["sf"] = tr.xpath('./td[@valign="top"]/strong/text()').extract_first()
+            item["province"] = tr.xpath('./td[@valign="top"]/strong/text()').extract_first()
             # 如果没有提取到省份，说明是前一个省份的，把之前定义好的变量sf给它
-            if item["sf"] == "\xa0" or item["sf"] is None:
-                item["sf"] = sf
+            if item["province"] == "\xa0" or item["province"] is None:
+                item["province"] = sf
             else:
-                sf = item["sf"]
+                sf = item["province"]
 
             # 提取城市
             a_list = tr.xpath('./td[last()]/a')
@@ -82,8 +83,8 @@ class FangSpider(RedisSpider):
 
             # 房子标题
             house_title = li.xpath('.//div[@class="fangyuan"]/a//text()').getall()
-            house_title = [re.sub(r'\s|/|－', '', i) for i in jushi]  # 将\n\t等字符替换为空字符
-            item["house_title"] = [i for i in jushi if len(i) > 0]  # 去掉空字符
+            house_title = [re.sub(r'\s|/|－', '', i) for i in house_title]  # 将\n\t等字符替换为空字符
+            item["house_title"] = [i for i in house_title if len(i) > 0]  # 去掉空字符
 
             # 新房价格
             nhouse_price = li.xpath('.//div[@class="nhouse_price"]//text()').extract()  # 这里使用extract提取（不为别的，我喜欢）
@@ -93,7 +94,8 @@ class FangSpider(RedisSpider):
             item["tel"] = "".join(li.xpath('.//div[@class="tel"]/p//text()').getall())
             # 房子详情url
             detail_url = li.xpath('.//div[@class="nlcd_name"]/a/@href').get()
-            item["detail_url"] = response.urljoin(detail_url)
+            # item["detail_url"] = response.urljoin(detail_url)
+            item["detail_url"] = detail_url
 
             yield item
 
@@ -129,8 +131,8 @@ class FangSpider(RedisSpider):
 
             # 地址
             add_shop = dl.xpath('.//p[@class="add_shop"]//text()').getall()
-            add_shop = [re.sub(r'\s|/|－|\|', '', i) for i in jushi]  # 将\n\t等字符替换为空字符
-            item["address"] = [i for i in jushi if len(i) > 0]  # 去掉空字符
+            add_shop = [re.sub(r'\s|/|－|\|', '', i) for i in add_shop]  # 将\n\t等字符替换为空字符
+            item["address"] = [i for i in add_shop if len(i) > 0]  # 去掉空字符
 
             # 总价格
             total_price = "".join(dl.xpath('.//dd[@class="price_right"]/span[@class="red"]//text()').getall())
