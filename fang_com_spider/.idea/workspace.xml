@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bc07c3a8-3640-4d03-b574-d28c1a7df6bc" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fang_com/middlewares.py" beforeDir="false" afterPath="$PROJECT_DIR$/fang_com/middlewares.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fang_com/pipelines.py" beforeDir="false" afterPath="$PROJECT_DIR$/fang_com/pipelines.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fang_com/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/fang_com/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fang_com/spiders/fang.py" beforeDir="false" afterPath="$PROJECT_DIR$/fang_com/spiders/fang.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
